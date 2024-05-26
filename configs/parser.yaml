@@ -1,0 +1,11 @@
+defaults:
+  - _self_
+  - clickhouse
+
+# list of ids of videos
+video_ids:
+  - 2129094316
+  - 2148947063
+
+# number of batches for asynchronous fetching
+n_batches: 32

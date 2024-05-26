@@ -1,0 +1,9 @@
+# cache
+*__pycache__
+
+# environment
+.env
+.venv
+
+# hydra
+outputs

@@ -1,0 +1,6 @@
+# credentials for connection to clickhouse
+ch_host: "127.0.0.1"
+ch_port: 9000
+ch_database: "highlights"
+ch_user: "default"
+ch_password: ""
