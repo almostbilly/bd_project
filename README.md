@@ -27,7 +27,7 @@ Create virtual environment
 Activate virtual environment
 
 ```bash
-  .\venv\Scripts\activate - for Windows
+  .\.venv\Scripts\activate - for Windows
   source venv/bin/activate - for Linux and MacOS
 ```
 
