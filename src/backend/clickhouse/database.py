@@ -1,11 +1,11 @@
 import contextlib
-import os
 from typing import List, Tuple, Union
 
 import asynch
 from asynch.cursors import DictCursor
 from asynch.pool import Pool
 from dotenv import load_dotenv
+from hydra import compose, initialize
 
 load_dotenv(override=True)
 
@@ -15,8 +15,10 @@ class Database:
         """
         Initialize the Database class.
         """
+        initialize(version_base=None, config_path="../../../configs")
+        cfg = compose(config_name="clickhouse")
         self.pool: Union[Pool, None] = None
-        self.database: str = os.getenv("CH_DATABASE", "default")
+        self.database: str = cfg.ch_database
 
     @contextlib.asynccontextmanager
     async def create_pool(self, **kwargs):
