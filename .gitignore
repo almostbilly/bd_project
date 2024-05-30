@@ -4,6 +4,7 @@
 # environment
 .env
 .venv
+venv
 
 # hydra
 outputs
