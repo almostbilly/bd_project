@@ -4,10 +4,6 @@ from typing import List, Tuple, Union
 import asynch
 from asynch.cursors import DictCursor
 from asynch.pool import Pool
-from dotenv import load_dotenv
-from hydra import compose, initialize
-
-load_dotenv(override=True)
 
 
 class Database:
@@ -15,10 +11,8 @@ class Database:
         """
         Initialize the Database class.
         """
-        initialize(version_base=None, config_path="../../../configs")
-        cfg = compose(config_name="clickhouse")
         self.pool: Union[Pool, None] = None
-        self.database: str = cfg.ch_database
+        self.database: str = "default"
 
     @contextlib.asynccontextmanager
     async def create_pool(self, **kwargs):
@@ -29,6 +23,7 @@ class Database:
             The connection pool.
         """
         self.pool = await asynch.create_pool(**kwargs)
+        self.database = kwargs["database"]
         yield self.pool
         self.pool.close()
         await self.pool.wait_closed()
