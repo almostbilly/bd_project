@@ -2,6 +2,11 @@ defaults:
   - _self_
   - clickhouse
 
+# number of categories to parse
+tok_k_categories: 10
+# number of videos for each category to parse
+tok_k_videos: 10
+
 # list of ids of videos
 video_ids:
   - 2129094316

@@ -91,7 +91,7 @@ class TwitchParser:
 
         return response
 
-    async def fetch_videos(
+    async def fetch_videos_by_ids(
         self, video_ids: Union[int, List[int], str, List[str]]
     ) -> List[Dict]:
         """
@@ -121,3 +121,58 @@ class TwitchParser:
             ]
 
         return videos
+
+    async def fetch_videos_by_category(
+        self, category_id: Union[int, str], top_k: int = 10
+    ) -> List[Dict]:
+        """
+        Fetches metadata of the videos of specified game or category.
+
+        Args:
+            category_id: A single category_id as int or string
+            top_k: The maximum number of videos to return.  1 <= top_k <= 100. The default is 10.
+
+        Returns:
+            A list of tuples containing the videos metadata.
+        """
+        if not category_id:
+            raise TypeError(f"{category_id} provided for category_id")
+
+        params = {
+            "game_id": str(category_id),
+            "language": "RU",
+            "period": "week",
+            "sort": "views",
+            "type": "archive",
+            "first": top_k,
+        }
+
+        async with aiohttp.ClientSession() as session:
+            response = await self.request_get("videos", params, session)
+            videos = [
+                (
+                    int(video["id"]),
+                    int(video["user_id"]),
+                    datetime.strptime(video["created_at"], "%Y-%m-%dT%H:%M:%SZ"),
+                    video["duration"],
+                    int(video["view_count"]),
+                )
+                for video in response["data"]
+            ]
+
+        return videos
+
+    async def fetch_top_categories(self, top_k: int = 10) -> List[Dict]:
+        """
+        Fetches metadata of top categories or games.
+
+        Returns:
+            A list of tuples containing the categories metadata.
+        """
+        async with aiohttp.ClientSession() as session:
+            response = await self.request_get("games/top", None, session)
+            videos = [
+                (int(category["id"]), category["name"]) for category in response["data"]
+            ]
+
+        return videos[0:top_k]
